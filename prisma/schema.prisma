@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model booking {
+  booking_id       Int      @id @default(autoincrement())
+  room_id          Int
+  date_in          DateTime @db.DateTime(0)
+  date_out         DateTime @db.DateTime(0)
+  no_of_booking    Int?
+  booking_guest_id Int
+  room             room     @relation(fields: [room_id], references: [room_id], onDelete: NoAction, onUpdate: NoAction, map: "booking_ibfk_1")
+
+  @@index([room_id], map: "room_id")
+}
+
+model comment {
+  comment_id  Int     @id @default(autoincrement())
+  task_id     Int
+  user_id     Int
+  description String? @db.VarChar(255)
+  star_rating Int?
+  user        user    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "comment_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model location {
+  location_id   Int     @id @default(autoincrement())
+  location_name String? @db.VarChar(255)
+  city          String? @db.VarChar(100)
+  country       String? @db.VarChar(100)
+  image         String? @db.VarChar(255)
+}
+
+model room {
+  room_id         Int       @id @default(autoincrement())
+  room_name       String    @db.VarChar(100)
+  user_id         Int?
+  bed_room        Int?
+  bed             Int?
+  bath_room       Int?
+  description     String?   @db.VarChar(255)
+  price           Int?      @default(50)
+  washing_machine Boolean?
+  iron            Boolean?
+  tivi            Boolean?
+  air_conditional Boolean?
+  wifi            Boolean?
+  kitchen         Boolean?
+  parking         Boolean?
+  swimming_pool   Boolean?
+  iron_machine    Boolean?
+  image           String?   @db.VarChar(255)
+  booking         booking[]
+  user            user?     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "room_ibfk_1")
+
+  @@index([user_id], map: "user_id")
+}
+
+model user {
+  user_id   Int       @id @default(autoincrement()) @map('userId')
+  name      String    @db.VarChar(100)
+  email     String    @db.VarChar(100)
+  pass_word String    @db.VarChar(100) @map('password')
+  phone     String    @db.VarChar(100)
+  birth_day String?   @db.VarChar(100) @map('birthday')
+  gender    String?   @db.VarChar(100)
+  role      String?   @db.VarChar(100)
+  comment   comment[]
+  room      room[]
+}
