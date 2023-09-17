@@ -64,12 +64,12 @@ model room {
 }
 
 model user {
-  user_id   Int       @id @default(autoincrement()) @map('userId')
+  user_id   Int       @id @default(autoincrement())
   name      String    @db.VarChar(100)
   email     String    @db.VarChar(100)
-  pass_word String    @db.VarChar(100) @map('password')
+  pass_word String    @db.VarChar(100)
   phone     String    @db.VarChar(100)
-  birth_day String?   @db.VarChar(100) @map('birthday')
+  birth_day String?   @db.VarChar(100)
   gender    String?   @db.VarChar(100)
   role      String?   @db.VarChar(100)
   comment   comment[]
